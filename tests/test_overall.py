@@ -73,7 +73,7 @@ def test_C347_single(tmp_dir):
 
 def test_citation():
     """test citation"""
-    cmd = f"dnaapler citation"
+    cmd = f"pypolca citation"
     exec_command(cmd)
 
 

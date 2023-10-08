@@ -102,8 +102,6 @@ If you have install `pypolca` with pip or from source, you will then need to ins
 * [Samtools](https://github.com/samtools/samtools) >=1.18
 * [freebayes](https://github.com/freebayes/freebayes) >=1.3.1
 
-
-
 ## Usage
 
 ```
@@ -146,7 +144,7 @@ The polished output FASTA will be `{prefix}_corrected.fasta` in the specified ou
 
 # Citation
 
-Please cite pypolca in your paper using:
+Please cite `pypolca` in your paper using:
 
 Bouras G, Zimin AV (2023) pypolca: Standalone Python reimplementation of the genome polishing tool POLCA. https://github.com/gbouras13/pypolca. 
 
