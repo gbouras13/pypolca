@@ -14,8 +14,8 @@
 ## Quick Start
 
 ```
-# creates conda environment with dnaapler
-conda create -n pypolca_env polca
+# creates conda environment with pypolca 
+conda create -n pypolca_env pypolca
 
 # activates conda environment
 conda activate pypolca_env
@@ -29,15 +29,17 @@ pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <th
   - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
+    - [Note of Caution for Large (e.g. Eukayotic) Genomes](#note-of-caution-for-large-eg-eukayotic-genomes)
   - [Installation](#installation)
     - [Conda](#conda)
     - [Pip](#pip)
     - [Source](#source)
   - [Usage](#usage)
+- [Citation](#citation)
 
 ## Description
 
-`pypolca` is a python reimplenetation of the POLCA polisher from the [MaSuRCA genome assembly and analysis toolkit](https://github.com/alekseyzimin/masurca).
+`pypolca` is a python reimplenetation of the POLCA polisher from the [MaSuRCA genome assembly and analysis toolkit](https://github.com/alekseyzimin/masurca) that was made for inclusion into the hybrid bacterial genome assembly tool [hybracter](https://github.com/gbouras13/hybracter).
 
 It was written for a number of reasons:
 
@@ -46,9 +48,15 @@ It was written for a number of reasons:
 * To use `polca.sh`, you need to install the entire MaSuRCA assembly toolkit.
 * POLCA is recommended for long-read only bacterial only polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in my assembly tool [hybracter](https://github.com/gbouras13/hybracter).
 
-Note: I do not guarantee `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) used.
+Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) that might be used as a dependency. I have decided to use the newest version of freebayes possible rather than the version installed with MaSuRCA. Testing is ongoing, but I doubt there will be many differences between `pypolca` and POLCA.
 
 Note if you really want to replicate POLCA, the latest versions of MaSuRCA uses freebayes `v1.3.1-dirty`.
+
+### Note of Caution for Large (e.g. Eukayotic) Genomes
+
+* I have implemeted `pypolca` predominantly for the use-case of polishing long-read bacterial genome assemblies with short reads. Therefore, I decided not to implement the batched multiprocessing of freebayes included in POLCA, because it was a lot of work for no benefit for most bacterial genomes. 
+* However, this is certainly not true for larger genomes such as eukaryotic organisms. `pypolca` should be a lot slower than POLCA for such organisms if you run both with more than 1 thread. 
+* I do not intend to implement multiprocessing but if someone wants to feel free to make a PR.
 
 ## Installation
 
@@ -56,7 +64,7 @@ Installation from conda is recommended as this will install all non-python depen
 
 ### Conda
 
-`pypolca` is available on bioconda.
+`pypolca` will soon be available on bioconda.
 
 ```
 conda install -c bioconda pypolca
@@ -129,4 +137,11 @@ Options:
 
 The polished output FASTA will be `{prefix}_corrected.fasta` in the specified output directory and the POLCA report will be the textfile `{prefix}.report`
 
+# Citation
+
+Please cite pypolca in your paper using:
+
+Bouras G, Zimin AV (2023) pypolca: Standalone Python reimplementation of the genome polishing tool POLCA. https://github.com/gbouras13/pypolca. 
+
+Zimin AV, Salzberg SL (2020) The genome polishing tool POLCA makes fast and accurate corrections in genome assemblies. PLoS Comput Biol 16(6): e1007981. https://doi.org/10.1371/journal.pcbi.1007981.
 
