@@ -29,7 +29,7 @@ pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <th
   - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
-    - [Note of Caution for Large (e.g. Eukayotic) Genomes](#note-of-caution-for-large-eg-eukayotic-genomes)
+    - [Note of Caution for Large (e.g. Eukaryotic) Genomes](#note-of-caution-for-large-eg-eukaryotic-genomes)
   - [Installation](#installation)
     - [Conda](#conda)
     - [Pip](#pip)
@@ -52,11 +52,18 @@ Note: I neither guarantee nor desire that `pypolca` will give identical results 
 
 Note if you really want to replicate POLCA, the latest versions of MaSuRCA uses freebayes `v1.3.1-dirty`.
 
-### Note of Caution for Large (e.g. Eukayotic) Genomes
+To enforce:
+
+```
+mamba create -n pypolca_env polca freebayes==1.3.1
+```
+
+### Note of Caution for Large (e.g. Eukaryotic) Genomes
 
 * I have implemeted `pypolca` predominantly for the use-case of polishing long-read bacterial genome assemblies with short reads. Therefore, I decided not to implement the batched multiprocessing of freebayes included in POLCA, because it was a lot of work for no benefit for most bacterial genomes. 
 * However, this is certainly not true for larger genomes such as eukaryotic organisms. `pypolca` should be a lot slower than POLCA for such organisms if you run both with more than 1 thread. 
 * I do not intend to implement multiprocessing but if someone wants to feel free to make a PR.
+
 
 ## Installation
 
@@ -89,7 +96,7 @@ pip install -e .
 pypolca -h
 ```
 
-You will then need to install the external dependencies separately, which can be found in `build/environment.yaml`
+If you have install `pypolca` with pip or from source, you will then need to install the external dependencies separately, which can be found in `build/environment.yaml`
 
 * [bwa](https://github.com/lh3/bwa) >=0.7.17
 * [Samtools](https://github.com/samtools/samtools) >=1.18
