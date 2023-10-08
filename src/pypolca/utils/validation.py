@@ -1,6 +1,5 @@
 import gzip
 import os
-import re
 import shutil
 import subprocess as sp
 import sys

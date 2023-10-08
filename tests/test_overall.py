@@ -18,6 +18,7 @@ import pytest
 
 test_data = Path("tests/test_data")
 
+
 def remove_directory(dir_path):
     if os.path.exists(dir_path):
         shutil.rmtree(dir_path)
@@ -27,8 +28,10 @@ def remove_directory(dir_path):
 def tmp_dir(tmpdir_factory):
     return tmpdir_factory.mktemp("tmp")
 
-# define threads 
+
+# define threads
 threads: int = 4
+
 
 def exec_command(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
     """executes shell command and returns stdout if completes exit code 0
@@ -47,7 +50,6 @@ def exec_command(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
     return out.decode("utf8") if out is not None else None
 
 
-
 def test_C347(tmp_dir):
     """test C347"""
     input_fasta: Path = f"{test_data}/chromosome.fasta"
@@ -58,6 +60,7 @@ def test_C347(tmp_dir):
     exec_command(cmd)
     remove_directory(outdir)
 
+
 def test_C347_single(tmp_dir):
     """test C347 single"""
     input_fasta: Path = f"{test_data}/chromosome.fasta"
@@ -66,6 +69,7 @@ def test_C347_single(tmp_dir):
     cmd = f"pypolca run -a {input_fasta} -1 {r1} -t {threads} -o {outdir} -f"
     exec_command(cmd)
     remove_directory(outdir)
+
 
 def test_citation():
     """test citation"""
@@ -85,5 +89,3 @@ class TestExits(unittest.TestCase):
             cmd = f"pypolca run -a {r1} -1 {r1} -t {threads} -o {outdir} -f"
             exec_command(cmd)
             remove_directory(outdir)
-
-   
