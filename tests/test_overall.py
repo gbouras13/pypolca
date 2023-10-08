@@ -52,7 +52,7 @@ def exec_command(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
 
 def test_C347(tmp_dir):
     """test C347"""
-    input_fasta: Path = f"{test_data}/chromosome.fasta"
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
     r1: Path = f"{test_data}/C347_R1.fastq.gz"
     r2: Path = f"{test_data}/C347_R2.fastq.gz"
     outdir: Path = "output_dir"
@@ -63,7 +63,7 @@ def test_C347(tmp_dir):
 
 def test_C347_single(tmp_dir):
     """test C347 single"""
-    input_fasta: Path = f"{test_data}/chromosome.fasta"
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
     r1: Path = f"{test_data}/C347_R1.fastq.gz"
     outdir: Path = "output_dir"
     cmd = f"pypolca run -a {input_fasta} -1 {r1} -t {threads} -o {outdir} -f"
@@ -83,7 +83,7 @@ class TestExits(unittest.TestCase):
     def test_FASTQ_as_FASTA(self):
         """test FASTQ as FASTA to fail"""
         with self.assertRaises(RuntimeError):
-            input_fasta: Path = f"{test_data}/chromosome.fasta"
+            input_fasta: Path = f"{test_data}/C347_flye.fasta"
             r1: Path = f"{test_data}/C347_R1.fastq.gz"
             outdir: Path = "output_dir"
             cmd = f"pypolca run -a {r1} -1 {r1} -t {threads} -o {outdir} -f"
