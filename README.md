@@ -100,7 +100,7 @@ If you have install `pypolca` with pip or from source, you will then need to ins
 
 * [bwa](https://github.com/lh3/bwa) >=0.7.17
 * [Samtools](https://github.com/samtools/samtools) >=1.18
-* [freebayes](https://github.com/freebayes/freebayes) >=1.3.1
+* [freebayes](https://github.com/freebayes/freebayes) >=1.3.1,<1.3.7
 
 ## Usage
 
