@@ -31,7 +31,10 @@ class ExternalTool:
 
     @property
     def command_as_str(self) -> str:
-        return shlex.join(self.command)
+        # return shlex.join(self.command)
+        # shlex.join only for python 3.8 and on
+        # freebayes 1.3.1 needs python 3.7
+        return " ".join(self.command)
 
     @staticmethod
     def _build_command(tool: str, input: str, output: str, params: str) -> List[str]:
