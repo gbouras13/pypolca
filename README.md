@@ -10,7 +10,7 @@
 
 # pypolca
 
-`pypolca` is a Standalone Python re-imnplementation of the POLCA polisher from the [MaSuRCA genome assembly and analysis toolkit](https://github.com/alekseyzimin/masurca).
+`pypolca` is a Standalone Python re-implementation of the POLCA polisher from the [MaSuRCA genome assembly and analysis toolkit](https://github.com/alekseyzimin/masurca).
 
 ## Quick Start
 
