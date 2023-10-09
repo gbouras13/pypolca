@@ -2,6 +2,11 @@
 History
 =======
 
+0.1.1 (2023-10-09)
+------------------
+
+* Patch release to fix the release.yaml uploads to pypi.
+
 0.1.0 (2023-10-09)
 ------------------
 
