@@ -1,5 +1,6 @@
 [![CI](https://github.com/gbouras13/pypolca/actions/workflows/ci.yaml/badge.svg)](https://github.com/gbouras13/pypolca/actions/workflows/ci.yaml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![DOI](https://zenodo.org/badge/700722839.svg)](https://zenodo.org/badge/latestdoi/700722839)
 
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/pypolca/badges/version.svg)](https://anaconda.org/bioconda/pypolca)
 [![Bioconda Downloads](https://img.shields.io/conda/dn/bioconda/pypolca)](https://img.shields.io/conda/dn/bioconda/pypolca)
