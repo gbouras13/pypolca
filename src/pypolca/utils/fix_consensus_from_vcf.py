@@ -81,18 +81,18 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
 
                     fixed_sequences[ctg] = oldseq
 
-                fixes = []
-                originals = []
-                offsets = []
                 ctg = fields[0]
 
             ff = fields[9].split(":")
-            if int(ff[5]) > 1 and int(ff[5]) >= 2 * int(ff[3]):
-                fixes.append(fields[4])
-                originals.append(fields[3])
-                offsets.append(int(fields[1]))
 
-    if len(fixes) > 0:
+            if int(ff[5]) > 1:
+                if int(ff[5]) >= 2 * int(ff[3]):
+                    fixes.append(fields[4])
+                    originals.append(fields[3])
+                    offsets.append(int(fields[1]))
+    
+    # actually fix the report now
+    if fixes:
         logger.info(f"POLCA has found variants. Fixing")
         # Proceed with fixing for the last contig
         if ctg not in rseq:
