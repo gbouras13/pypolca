@@ -101,7 +101,6 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
         for i in range(len(fixes) - 1, -1, -1):  # Going in reverse order to avoid shifting sequence due to indels
             if ctg not in rseq:
                 raise Exception(f"sequence {ctg} not found in the input fasta file")
-            print(original_seq)
             original_seq = oldseq[offsets[i] - 1:offsets[i] - 1 + len(originals[i])]
             if any(c in "acgtnACGTN" for c in original_seq) and not original_seq.upper() == originals[i].upper():
                 logger.warning("WARNING! Sequence does not match the original:", ctg, original_seq, originals[i], offsets[i])

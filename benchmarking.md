@@ -94,13 +94,20 @@ mv Lerminiaux_isolateL* POLCA_outputs
 
 
 
-  
-  
+```
+
+
 
 
 
 
 
 ```
-
 mamba create -n mummer mummer
+conda activate mummer
+
+
+dnadiff -p <> <> <>
+
+
+```
