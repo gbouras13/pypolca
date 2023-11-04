@@ -49,6 +49,8 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
     originals = []
     offsets = []
 
+    total_count = 0 
+
     # Read and process VCF file
     with open(vcf) as vcf_file:
         for line in vcf_file:
@@ -92,9 +94,10 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
                     fixes.append(f[4])
                     originals.append(f[3])
                     offsets.append(int(f[1]))
+                    total_count += 1
             
     # actually fix the report now
-    if fixes:
+    if total_count > 0:
         logger.info(f"POLCA has found variants. Fixing")
         # Proceed with fixing
         oldseq = rseq[ctg]
