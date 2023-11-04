@@ -1,7 +1,8 @@
 import math
 from pathlib import Path
-from loguru import logger
+
 from Bio import SeqIO
+from loguru import logger
 
 
 def create_report(vcf: Path, genome: Path, report_file: Path) -> None:
@@ -46,7 +47,7 @@ def create_report(vcf: Path, genome: Path, report_file: Path) -> None:
     numerr = numsub + nind
     erate = numerr / total_size
 
-    qual = round(100 - (erate) * 100 ,2 )
+    qual = round(100 - (erate) * 100, 2)
 
     qv = round(-10 * math.log10(erate + 0.0000000001), 2)
 
