@@ -93,7 +93,7 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
     
     # actually fix the report now
     if fixes:
-        logger.info(f"POLCA has found variants. Fixing")
+        logger.info(f"POLCA has found {len(fixes)} variants. Fixing")
         # Proceed with fixing for the last contig
         if ctg not in rseq:
             raise Exception("Sequence {} not found in the input fasta file".format(ctg))
