@@ -2,6 +2,14 @@
 History
 =======
 
+0.2.0 (2023-11-04)
+------------------
+
+* Fixes bug where `pypolca` would always warn it found 0 variants.
+* Also would result in the polishing not working. 
+* Please upgrade if you have used v0.1.1!
+* I have tested `pypolca` v0.2.0 vs POLCA more thoroughly. 
+
 0.1.1 (2023-10-09)
 ------------------
 
