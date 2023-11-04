@@ -92,7 +92,7 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
                 originals.append(fields[3])
                 offsets.append(int(fields[1]))
 
-    if fixes:
+    if len(fixes) > 0:
         logger.info(f"POLCA has found variants. Fixing")
         # Proceed with fixing for the last contig
         if ctg not in rseq:
