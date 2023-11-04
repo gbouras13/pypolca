@@ -60,6 +60,7 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
             if ',' in f[4] or f[0] not in rseq:
                 continue
         
+            # if the contig is new it will instantaite a new contig - is reading line by line so needed
             if f[0] != ctg:
                 if fixes:
                     if ctg not in rseq:
@@ -71,37 +72,39 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
                         # First, we check if the sequence at the given offset matches the original variant
                         original_seq = oldseq[offsets[i] - 1:offsets[i] - 1 + len(originals[i])]
                         if any(c in "acgtnACGTN" for c in original_seq) and not original_seq.upper() == originals[i].upper():
-                            logger.warning("WARNING! Sequence does not match the original:", ctg, original_seq, originals[i], offsets[i], file=sys.stderr)
+                            logger.warning("WARNING! Sequence does not match the original:", ctg, original_seq, originals[i], offsets[i])
                         else:
                             # Then substitute
                             oldseq = oldseq[:offsets[i] - 1] + fixes[i] + oldseq[offsets[i] - 1 + len(originals[i]):]
         
                     rseq[ctg] = oldseq
-        
+
+                
                 fixes = []
                 originals = []
                 offsets = []
                 ctg = f[0]
         
+            # append if meets criteria for POLCA
             ff = f[9].split(':')
-            if int(ff[5]) > 1 and int(ff[5]) >= 2 * int(ff[3]):
-                fixes.append(f[4])
-                originals.append(f[3])
-                offsets.append(int(f[1]))
+            if int(ff[5]) > 1:
+                if int(ff[5]) >= 2 * int(ff[3]):
+                    fixes.append(f[4])
+                    originals.append(f[3])
+                    offsets.append(int(f[1]))
             
-
-
     # actually fix the report now
     if fixes:
-        logger.info(f"POLCA has found {len(fixes)} variants. Fixing")
+        logger.info(f"POLCA has found variants. Fixing")
         # Proceed with fixing
         oldseq = rseq[ctg]
         for i in range(len(fixes) - 1, -1, -1):  # Going in reverse order to avoid shifting sequence due to indels
             if ctg not in rseq:
                 raise Exception(f"sequence {ctg} not found in the input fasta file")
+            print(original_seq)
             original_seq = oldseq[offsets[i] - 1:offsets[i] - 1 + len(originals[i])]
             if any(c in "acgtnACGTN" for c in original_seq) and not original_seq.upper() == originals[i].upper():
-                logger.warning("WARNING! Sequence does not match the original:", ctg, original_seq, originals[i], offsets[i], file=sys.stderr)
+                logger.warning("WARNING! Sequence does not match the original:", ctg, original_seq, originals[i], offsets[i])
             else:
                 oldseq = oldseq[:offsets[i] - 1] + fixes[i] + oldseq[offsets[i] - 1 + len(originals[i]):]
     
