@@ -97,6 +97,8 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
                     total_count += 1
             
     # actually fix the report now
+    # if fixes as previously means that this step wouldn't continue if the last contig had no changes
+    # therefore, use a total count variable to achieve this.
     if total_count > 0:
         logger.info(f"POLCA has found variants. Fixing")
         # Proceed with fixing

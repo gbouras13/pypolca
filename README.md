@@ -36,6 +36,7 @@ pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <th
     - [Pip](#pip)
     - [Source](#source)
   - [Usage](#usage)
+- [Benchmarking](#benchmarking)
 - [Citation](#citation)
 
 ## Description
@@ -49,7 +50,11 @@ It was written for a number of reasons:
 * To use `polca.sh`, you need to install the entire MaSuRCA assembly toolkit.
 * POLCA is recommended for long-read only bacterial only polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in my assembly tool [hybracter](https://github.com/gbouras13/hybracter).
 
-Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) that might be used as a dependency. I have decided to use the newest version of freebayes possible rather than the version installed with MaSuRCA. Testing is ongoing, but I doubt there will be many differences between `pypolca` and POLCA.
+Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) that might be used as a dependency. 
+
+In testing, `pypolca` v0.2.0 (running Freebayes v1.3.6) was extremely similar, but not identical to POLCA (running Freebayes v1.3.1-dirty). Please see [benchmarking](benchmarking.md) for more details.
+
+I have decided to use the newest version of freebayes possible rather than the version installed with MaSuRCA. 
 
 Note if you really want to replicate POLCA, the latest versions of MaSuRCA uses freebayes `v1.3.1-dirty`.
 
@@ -142,6 +147,11 @@ Options:
 ```
 
 The polished output FASTA will be `{prefix}_corrected.fasta` in the specified output directory and the POLCA report will be the textfile `{prefix}.report`
+
+# Benchmarking
+
+Please see [benchmarking](benchmarking.md) for more details. As can be seen, `pypolca` v0.2.0 (running Freebayes v1.3.6) was extremely similar, but not identical to POLCA (running Freebayes v1.3.1-dirty).
+
 
 # Citation
 
