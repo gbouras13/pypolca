@@ -1,7 +1,6 @@
 import math
-import sys
 from pathlib import Path
-
+from loguru import logger
 from Bio import SeqIO
 
 
@@ -53,8 +52,14 @@ def create_report(vcf: Path, genome: Path, report_file: Path) -> None:
 
     with open(report_file, "w") as f:
         f.write("Stats BEFORE polishing:\n")
+        logger.info("Stats BEFORE polishing:")
         f.write(f"Substitution Errors Found: {numsub}\n")
+        logger.info(f"Substitution Errors Found: {numsub}")
         f.write(f"Insertion/Deletion Errors Found: {nind}\n")
+        logger.info(f"Insertion/Deletion Errors Found: {nind}")
         f.write(f"Assembly Size: {total_size}\n")
+        logger.info(f"Assembly Size: {total_size}")
         f.write(f"Consensus Quality Before Polishing: {qual}\n")
+        logger.info(f"Consensus Quality Before Polishing: {qual}")
         f.write(f"Consensus QV Before Polishing: {qv}\n")
+        logger.info(f"Consensus QV Before Polishing: {qv}")
