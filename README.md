@@ -52,24 +52,15 @@ It was written for a number of reasons:
 
 Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) that might be used as a dependency. 
 
-In testing, `pypolca` v0.2.0 (running Freebayes v1.3.6) was extremely similar, but not identical to POLCA (running Freebayes v1.3.1-dirty). Please see [benchmarking](benchmarking.md) for more details.
+In testing, `pypolca` v0.2.0 (running Freebayes v1.3.6 and Samtools v1.18) was extremely similar, but not identical to POLCA (running Freebayes v1.3.1-dirty and Samtools v0.1.20). Please see [benchmarking](benchmarking.md) for more details.
 
-I have decided to use the newest version of freebayes possible rather than the version installed with MaSuRCA. 
-
-Note if you really want to replicate POLCA, the latest versions of MaSuRCA uses freebayes `v1.3.1-dirty`.
-
-To enforce:
-
-```
-mamba create -n pypolca_env polca freebayes==1.3.1
-```
+I have decided to use the newest versions of freebayes and Samtools possible rather than the version installed with MaSuRCA, for ease of maintenance and particularly because the version of Samtools used is a major version behind and the CLI has changed. 
 
 ### Note of Caution for Large (e.g. Eukaryotic) Genomes
 
 * I have implemeted `pypolca` predominantly for the use-case of polishing long-read bacterial genome assemblies with short reads. Therefore, I decided not to implement the batched multiprocessing of freebayes included in POLCA, because it was a lot of work for no benefit for most bacterial genomes. 
 * However, this is certainly not true for larger genomes such as eukaryotic organisms. `pypolca` should be a lot slower than POLCA for such organisms if you run both with more than 1 thread. 
 * I do not intend to implement multiprocessing but if someone wants to feel free to make a PR.
-
 
 ## Installation
 
@@ -150,7 +141,7 @@ The polished output FASTA will be `{prefix}_corrected.fasta` in the specified ou
 
 # Benchmarking
 
-Please see [benchmarking](benchmarking.md) for more details. As can be seen, `pypolca` v0.2.0 (running Freebayes v1.3.6) was extremely similar, but not identical to POLCA (running Freebayes v1.3.1-dirty).
+Please see [benchmarking](benchmarking.md) for more details. As can be seen, `pypolca` v0.2.0 was extremely similar, but not identical to POLCA.
 
 
 # Citation
