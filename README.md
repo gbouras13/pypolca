@@ -50,7 +50,7 @@ It was written for a number of reasons:
 * To use `polca.sh`, you need to install the entire MaSuRCA assembly toolkit.
 * POLCA is recommended for long-read only bacterial only polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in my assembly tool [hybracter](https://github.com/gbouras13/hybracter).
 
-Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) that might be used as a dependency. 
+Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) and Samtools that might be used as a dependency. 
 
 In testing, `pypolca` v0.2.0 (running Freebayes v1.3.6 and Samtools v1.18) was extremely similar, but not identical to POLCA (running Freebayes v1.3.1-dirty and Samtools v0.1.20). Please see [benchmarking](benchmarking.md) for more details.
 
