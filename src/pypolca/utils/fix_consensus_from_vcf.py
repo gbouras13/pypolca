@@ -58,6 +58,7 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
                 continue
 
             f = line.split()
+            # this line skips the multiple allele cases
             if "," in f[4] or f[0] not in rseq:
                 continue
 
