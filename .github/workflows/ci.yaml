@@ -28,6 +28,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           miniforge-variant: Mambaforge
           miniforge-version: latest
+          channels: conda-forge,bioconda,defaults
+          channel-priority: strict
+          auto-update-conda: true
           use-mamba: true
           auto-activate-base: false
 

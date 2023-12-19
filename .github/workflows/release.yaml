@@ -12,9 +12,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: 3.9
+          python-version: 3.11
           activate-environment: pypolca
           environment-file: build/environment.yaml
           auto-activate-base: false
@@ -22,6 +22,8 @@ jobs:
           channels: conda-forge,bioconda,defaults
           channel-priority: strict
           auto-update-conda: true
+
+          
       - name: Install project
         shell: bash -l {0}
         run: |
