@@ -17,22 +17,20 @@ jobs:
         python-version: ["3.11"]
 
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - uses: conda-incubator/setup-miniconda@v3
         with:
+          python-version: 3.11
           activate-environment: pypolca
           environment-file: build/environment.yaml
-          python-version: ${{ matrix.python-version }}
+          auto-activate-base: false
           miniforge-variant: Mambaforge
-          miniforge-version: latest
           channels: conda-forge,bioconda,defaults
           channel-priority: strict
           auto-update-conda: true
-          use-mamba: true
-          auto-activate-base: false
 
       - name: Install project
         shell: bash -l {0}
