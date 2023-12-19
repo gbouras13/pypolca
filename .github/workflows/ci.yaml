@@ -21,17 +21,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Setup env
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: pypolca
           environment-file: build/environment.yaml
           python-version: ${{ matrix.python-version }}
-          auto-activate-base: false
           miniforge-variant: Mambaforge
-          channels: conda-forge,bioconda,defaults
-          channel-priority: strict
-          auto-update-conda: true
+          miniforge-version: latest
+          use-mamba: true
+          auto-activate-base: false
+
       - name: Install project
         shell: bash -l {0}
         run: |
