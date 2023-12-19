@@ -2,6 +2,11 @@
 History
 =======
 
+0.2.1 (2023-12-19)
+------------------
+
+* Fixes bug in generating the report. If there were multiple alleles at a certain site (on a certain line in the vcf), this would crash pypolca. Exception handling has been added.
+
 0.2.0 (2023-11-05)
 ------------------
 
