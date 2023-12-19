@@ -33,10 +33,17 @@ def create_report(vcf: Path, genome: Path, report_file: Path) -> None:
             # Split the line using whitespace
             fields = line.split()
             # Check if the fourth and fifth fields have length greater than 1
+            
             if len(fields[3]) > 1 or len(fields[4]) > 1:
                 parts = fields[9].split(":")
-                if int(parts[3]) == 0 and int(parts[5]) > 1:
-                    nind += abs(len(fields[3]) - len(fields[4]))
+            # sometimes the record field has multiple alleles (which are not changed by Polca) so int(parts[5]) returns a Valueerror.
+            # in Awk it is not done as a loop but as a pipe as below. It will not count that line
+            # NUMIND=`grep --text -v '^#' $BASM.vcf  |perl -ane '{if(length($F[3])>1 || length($F[4])>1){$nerr=abs(length($F[3])-length($F[4]));print "$F[9]:$nerr\n";}}' | awk -F ':' 'BEGIN{nerr=0}{if($4==0 && $6>1) nerr+=$NF}END{print nerr}'` 
+                try:
+                    if int(parts[3]) == 0 and int(parts[5]) > 1:
+                        nind += abs(len(fields[3]) - len(fields[4]))
+                except ValueError:
+                    continue
 
     # Print the result
 
