@@ -72,12 +72,12 @@ class ExternalTool:
             try:
                 tool.run()
             except subprocess.CalledProcessError as error:
-                logger.error(
+                logger.warning(
                     f"Error calling {tool.command_as_str} (return code {error.returncode})"
                 )
-                logger.error(f"Please check stdout log file: {tool.out_log}")
-                logger.error(f"Please check stderr log file: {tool.err_log}")
-                logger.error("Temporary files are preserved for debugging")
+                logger.warning(f"Please check stdout log file: {tool.out_log}")
+                logger.warning(f"Please check stderr log file: {tool.err_log}")
+                logger.warning("Temporary files are preserved for debugging")
                 logger.error("Exiting...")
 
                 if ctx:
