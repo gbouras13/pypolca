@@ -11,7 +11,9 @@ from loguru import logger
 from pypolca.utils.util import copy_file
 
 
-def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Tuple[int, int]:
+def fix_consensus_from_vcf(
+    ref_contigs: Path, vcf: Path, out_fasta: Path
+) -> Tuple[int, int]:
     """
     Fix errors in the consensus called in a VCF file by FreeBayes.
 
@@ -177,26 +179,31 @@ def edit_distance(s1, s2):
     substitutions and indels.
     """
     s1, s2 = s1.upper(), s2.upper()
-    dp = [[0 for n in range(len(s2)+1)] for m in range(len(s1)+1)]
-    for i in range(len(s1)+1):
+    dp = [[0 for n in range(len(s2) + 1)] for m in range(len(s1) + 1)]
+    for i in range(len(s1) + 1):
         dp[i][0] = i
-    for j in range(len(s2)+1):
+    for j in range(len(s2) + 1):
         dp[0][j] = j
-    for i in range(1, len(s1)+1):
-        for j in range(1, len(s2)+1):
-            cost = 0 if s1[i-1] == s2[j-1] else 1
-            dp[i][j] = min(dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + cost)
+    for i in range(1, len(s1) + 1):
+        for j in range(1, len(s2) + 1):
+            cost = 0 if s1[i - 1] == s2[j - 1] else 1
+            dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost)
     subs, indels = 0, 0
     i, j = len(s1), len(s2)
     while i > 0 or j > 0:
-        if i > 0 and j > 0 and s1[i-1] != s2[j-1] and dp[i][j] == dp[i-1][j-1] + 1:
+        if (
+            i > 0
+            and j > 0
+            and s1[i - 1] != s2[j - 1]
+            and dp[i][j] == dp[i - 1][j - 1] + 1
+        ):
             subs += 1
             i -= 1
             j -= 1
-        elif i > 0 and dp[i][j] == dp[i-1][j] + 1:
+        elif i > 0 and dp[i][j] == dp[i - 1][j] + 1:
             indels += 1
             i -= 1
-        elif j > 0 and dp[i][j] == dp[i][j-1] + 1:
+        elif j > 0 and dp[i][j] == dp[i][j - 1] + 1:
             indels += 1
             j -= 1
         else:

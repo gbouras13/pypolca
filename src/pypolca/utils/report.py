@@ -5,7 +5,9 @@ from Bio import SeqIO
 from loguru import logger
 
 
-def create_report(vcf: Path, genome: Path, report_file: Path, numsub: int, nind: int) -> None:
+def create_report(
+    vcf: Path, genome: Path, report_file: Path, numsub: int, nind: int
+) -> None:
     with open(vcf, "r") as file:
         lines = file.readlines()
 
