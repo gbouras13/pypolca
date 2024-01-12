@@ -226,12 +226,14 @@ def run(
 
     out_fasta: Path = Path(output) / f"{prefix}_corrected.fasta"
     if no_polish is False:
-        fix_consensus_from_vcf(assembly_temp, vcf, out_fasta)
+        subs, indels = fix_consensus_from_vcf(assembly_temp, vcf, out_fasta)
+    else:
+        subs, indels = 0, 0
 
     ######
     # report.py
     report_file: Path = Path(output) / f"{prefix}.report"
-    create_report(vcf, assembly_temp, report_file)
+    create_report(vcf, assembly_temp, report_file, subs, indels)
 
     # finalise
     if no_polish is False:
