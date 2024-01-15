@@ -37,7 +37,7 @@ def fix_consensus_from_vcf(
             if line.startswith(">"):
                 if seq:
                     rseq[ctg] = seq
-                ctg = line[1:]
+                ctg = line[1:].split()[0]
                 seq = ""
             else:
                 seq += line
