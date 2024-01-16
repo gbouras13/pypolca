@@ -12,7 +12,11 @@ from pypolca.utils.util import copy_file
 
 
 def fix_consensus_from_vcf(
-    ref_contigs: Path, vcf: Path, out_fasta: Path
+    ref_contigs: Path,
+    vcf: Path,
+    out_fasta: Path,
+    min_alt: int,
+    min_ratio: float,
 ) -> Tuple[int, int]:
     """
     Fix errors in the consensus called in a VCF file by FreeBayes.
@@ -111,12 +115,14 @@ def fix_consensus_from_vcf(
 
             # append if meets criteria for POLCA
             ff = f[9].split(":")
-            if int(ff[5]) > 1:
-                if int(ff[5]) >= 2 * int(ff[3]):
-                    fixes.append(f[4])
-                    originals.append(f[3])
+            ref_count, alt_count = int(ff[3]), int(ff[5])
+            ref_seq, alt_seq = f[3], f[4]
+            if alt_count >= min_alt:
+                if alt_count >= min_ratio * ref_count:
+                    fixes.append(alt_seq)
+                    originals.append(ref_seq)
                     offsets.append(int(f[1]))
-                    subs, indels = edit_distance(f[3], f[4])
+                    subs, indels = edit_distance(ref_seq, alt_seq)
                     total_subs += subs
                     total_indels += indels
                     total_count += 1

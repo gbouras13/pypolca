@@ -88,6 +88,21 @@ def common_options(func):
             "-f", "--force", is_flag=True, help="Force overwrites the output directory"
         ),
         click.option(
+            "--min_alt",
+            help="Minimum alt allele count to make a change",
+            default=2,
+            show_default=True,
+        ),
+        click.option(
+            "--min_ratio",
+            help="Minimum alt allele to ref allele ratio to make a change",
+            default=2.0,
+            show_default=True,
+        ),
+        click.option(
+            "--careful", is_flag=True, help="Equivalent to --min_alt 4 --min_ratio 3"
+        ),
+        click.option(
             "-n",
             "--no_polish",
             is_flag=True,
@@ -140,6 +155,9 @@ def run(
     threads,
     output,
     force,
+    min_alt,
+    min_ratio,
+    careful,
     no_polish,
     memory_limit,
     prefix,
@@ -147,6 +165,8 @@ def run(
 ):
     """Python implementation of the POLCA polisher from MaSuRCA"""
 
+    if careful:
+        min_alt, min_ratio = 4, 3
     params = {
         "--assembly": assembly,
         "--reads1": reads1,
@@ -154,6 +174,8 @@ def run(
         "--output": output,
         "--threads": threads,
         "--force": force,
+        "--min_alt": min_alt,
+        "--min_ratio": min_ratio,
         "--memory_limit": memory_limit,
         "--no_polish": no_polish,
         "--prefix": prefix,
@@ -226,7 +248,9 @@ def run(
 
     out_fasta: Path = Path(output) / f"{prefix}_corrected.fasta"
     if no_polish is False:
-        subs, indels = fix_consensus_from_vcf(assembly_temp, vcf, out_fasta)
+        subs, indels = fix_consensus_from_vcf(
+            assembly_temp, vcf, out_fasta, min_alt, min_ratio
+        )
     else:
         subs, indels = 0, 0
 
