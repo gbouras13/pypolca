@@ -2,6 +2,15 @@
 History
 =======
 
+0.3.0 (2023-01-17)
+------------------
+
+* Includes a number of changes by @rrwick.
+* Fixes errors with counts in the report (there were some errors).
+* Fixes issue where pypolca would crash if there were spaces in the header
+* Adds `--min_alt`, `--min_ratio` and `--careful` parameters. 
+* Using `--careful` is recommended for low read depth (<25x coverage).
+
 0.2.1 (2023-12-19)
 ------------------
 

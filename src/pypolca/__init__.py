@@ -79,7 +79,7 @@ def common_options(func):
         click.option(
             "-o",
             "--output",
-            default="output_polca",
+            default="output_pypolca",
             show_default=True,
             type=click.Path(),
             help="Output directory path",
@@ -91,12 +91,14 @@ def common_options(func):
             "--min_alt",
             help="Minimum alt allele count to make a change",
             default=2,
+            type=int,
             show_default=True,
         ),
         click.option(
             "--min_ratio",
             help="Minimum alt allele to ref allele ratio to make a change",
             default=2.0,
+            type=float,
             show_default=True,
         ),
         click.option(
@@ -120,7 +122,7 @@ def common_options(func):
             "-p",
             "--prefix",
             type=str,
-            default="polca",
+            default="pypolca",
             help="prefix for output files",
             show_default=True,
         ),

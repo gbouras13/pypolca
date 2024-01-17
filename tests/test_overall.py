@@ -61,6 +61,28 @@ def test_C347(tmp_dir):
     remove_directory(outdir)
 
 
+def test_C347_careful(tmp_dir):
+    """test C347 --careful"""
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
+    r1: Path = f"{test_data}/C347_R1.fastq.gz"
+    r2: Path = f"{test_data}/C347_R2.fastq.gz"
+    outdir: Path = "output_dir"
+    cmd = f"pypolca run -a {input_fasta} -1 {r1} -2 {r2} -t {threads} -o {outdir} -f --careful"
+    exec_command(cmd)
+    remove_directory(outdir)
+
+
+def test_C347_params(tmp_dir):
+    """test C347 --min_alt and --min_ratio"""
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
+    r1: Path = f"{test_data}/C347_R1.fastq.gz"
+    r2: Path = f"{test_data}/C347_R2.fastq.gz"
+    outdir: Path = "output_dir"
+    cmd = f"pypolca run -a {input_fasta} -1 {r1} -2 {r2} -t {threads} -o {outdir} -f --min_alt 6 --min_ratio 2"
+    exec_command(cmd)
+    remove_directory(outdir)
+
+
 def test_C347_single(tmp_dir):
     """test C347 single"""
     input_fasta: Path = f"{test_data}/C347_flye.fasta"
