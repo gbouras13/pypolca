@@ -2,7 +2,7 @@
 
 import re
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -11,7 +11,13 @@ from loguru import logger
 from pypolca.utils.util import copy_file
 
 
-def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> None:
+def fix_consensus_from_vcf(
+    ref_contigs: Path,
+    vcf: Path,
+    out_fasta: Path,
+    min_alt: int,
+    min_ratio: float,
+) -> Tuple[int, int]:
     """
     Fix errors in the consensus called in a VCF file by FreeBayes.
 
@@ -21,7 +27,8 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
         out_fasta (Path): Path to the output FASTA file.
 
     Returns:
-        None
+        total_subs (int): the total number of substitution changes made
+        total_indels (int): the total number of indel changes made
     """
 
     rseq = {}
@@ -34,7 +41,7 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
             if line.startswith(">"):
                 if seq:
                     rseq[ctg] = seq
-                ctg = line[1:]
+                ctg = line[1:].split()[0]
                 seq = ""
             else:
                 seq += line
@@ -49,6 +56,7 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
     offsets = []
 
     total_count = 0
+    total_subs, total_indels = 0, 0
 
     # Read and process VCF file
     with open(vcf) as vcf_file:
@@ -107,11 +115,16 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
 
             # append if meets criteria for POLCA
             ff = f[9].split(":")
-            if int(ff[5]) > 1:
-                if int(ff[5]) >= 2 * int(ff[3]):
-                    fixes.append(f[4])
-                    originals.append(f[3])
+            ref_count, alt_count = int(ff[3]), int(ff[5])
+            ref_seq, alt_seq = f[3], f[4]
+            if alt_count >= min_alt:
+                if alt_count >= min_ratio * ref_count:
+                    fixes.append(alt_seq)
+                    originals.append(ref_seq)
                     offsets.append(int(f[1]))
+                    subs, indels = edit_distance(ref_seq, alt_seq)
+                    total_subs += subs
+                    total_indels += indels
                     total_count += 1
 
     # actually fix the report now
@@ -162,3 +175,44 @@ def fix_consensus_from_vcf(ref_contigs: Path, vcf: Path, out_fasta: Path) -> Non
         )
         # copy the reference to the output
         copy_file(ref_contigs, out_fasta)
+
+    return total_subs, total_indels
+
+
+def edit_distance(s1, s2):
+    """
+    Calculate the global edit distance between two strings, providing separate counts for
+    substitutions and indels.
+    """
+    s1, s2 = s1.upper(), s2.upper()
+    dp = [[0 for n in range(len(s2) + 1)] for m in range(len(s1) + 1)]
+    for i in range(len(s1) + 1):
+        dp[i][0] = i
+    for j in range(len(s2) + 1):
+        dp[0][j] = j
+    for i in range(1, len(s1) + 1):
+        for j in range(1, len(s2) + 1):
+            cost = 0 if s1[i - 1] == s2[j - 1] else 1
+            dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost)
+    subs, indels = 0, 0
+    i, j = len(s1), len(s2)
+    while i > 0 or j > 0:
+        if (
+            i > 0
+            and j > 0
+            and s1[i - 1] != s2[j - 1]
+            and dp[i][j] == dp[i - 1][j - 1] + 1
+        ):
+            subs += 1
+            i -= 1
+            j -= 1
+        elif i > 0 and dp[i][j] == dp[i - 1][j] + 1:
+            indels += 1
+            i -= 1
+        elif j > 0 and dp[i][j] == dp[i][j - 1] + 1:
+            indels += 1
+            j -= 1
+        else:
+            i -= 1
+            j -= 1
+    return subs, indels
