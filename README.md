@@ -48,7 +48,7 @@ It was written for a number of reasons:
 * MaSuRCA is only available on Linux, not for MacOS.
 * The original `polca.sh` script from MaSuRCA was difficult to use because you could not specify an output directory. Additionally, due to its shell implementation, both FASTQ read files needed to be input together as a string
 * To use `polca.sh`, you need to install the entire MaSuRCA assembly toolkit.
-* POLCA is recommended for long-read only bacterial only polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in my assembly tool [hybracter](https://github.com/gbouras13/hybracter).
+* POLCA is recommended for long-read first bacterial assembly polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in my assembly tool [hybracter](https://github.com/gbouras13/hybracter).
 
 Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) and Samtools that might be used as a dependency. 
 
