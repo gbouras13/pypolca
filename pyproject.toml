@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pypolca"
-version = "0.2.1" # change VERSION too
+version = "0.3.0" # change VERSION too
 description = "Standalone Python implementation of the POLCA polisher from MaSuRCA"
 authors = ["George Bouras <george.bouras@adelaide.edu.au>"]
 license = "MIT"

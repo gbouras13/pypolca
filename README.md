@@ -130,6 +130,11 @@ Options:
   -t, --threads INTEGER    Number of threads.  [default: 1]
   -o, --output PATH        Output directory path  [default: output_polca]
   -f, --force              Force overwrites the output directory
+  --min_alt INTEGER        Minimum alt allele count to make a change
+                           [default: 2]
+  --min_ratio FLOAT        Minimum alt allele to ref allele ratio to make a
+                           change  [default: 2.0]
+  --careful                Equivalent to --min_alt 4 --min_ratio 3
   -n, --no_polish          do not polish, just create vcf file, evaluate the
                            assembly and exit
   -m, --memory_limit TEXT  Memory per thread to use in samtools sort, set to
@@ -148,7 +153,7 @@ Please see [benchmarking](benchmarking.md) for more details. As can be seen, `py
 
 Please cite `pypolca` in your paper using:
 
-Bouras G, Zimin AV (2023) pypolca: Standalone Python reimplementation of the genome polishing tool POLCA. https://github.com/gbouras13/pypolca. 
+Bouras G, Wick RR (2023) pypolca: Standalone Python reimplementation of the genome polishing tool POLCA. https://github.com/gbouras13/pypolca. 
 
 Zimin AV, Salzberg SL (2020) The genome polishing tool POLCA makes fast and accurate corrections in genome assemblies. PLoS Comput Biol 16(6): e1007981. https://doi.org/10.1371/journal.pcbi.1007981.
 
