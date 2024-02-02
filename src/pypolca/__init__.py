@@ -176,6 +176,7 @@ def run(
         "--output": output,
         "--threads": threads,
         "--force": force,
+        "--careful": careful,
         "--min_alt": min_alt,
         "--min_ratio": min_ratio,
         "--memory_limit": memory_limit,
