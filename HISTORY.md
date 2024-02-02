@@ -1,6 +1,11 @@
 History
 =======
 
+0.3.1 (2023-02-02)
+------------------
+
+* Adds `--careful` to log file to make it clear if it has been run
+
 0.3.0 (2023-01-17)
 ------------------
 
