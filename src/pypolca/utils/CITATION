@@ -1,6 +1,6 @@
 Please cite pypolca in your paper using:
 
-Bouras G, Wick RR (2023) pypolca: Standalone Python reimplementation of the genome polishing tool POLCA. https://github.com/gbouras13/pypolca. 
+Bouras G, Judd LM, Edwards RA, Vreugde S, Stinear TP, Wick RR (2024) How low can you go? Short-read polishing of Oxford Nanopore bacterial genome assemblies. bioRxiv 2024.03.07.584013; doi: [https://doi.org/10.1101/2024.03.07.584013](https://doi.org/10.1101/2024.03.07.584013)
 
-Zimin AV, Salzberg SL (2020) The genome polishing tool POLCA makes fast and accurate corrections in genome assemblies. PLoS Comput Biol 16(6): e1007981. https://doi.org/10.1371/journal.pcbi.1007981.
+Zimin AV, Salzberg SL (2020) The genome polishing tool POLCA makes fast and accurate corrections in genome assemblies. PLoS Comput Biol 16(6): e1007981. [https://doi.org/10.1371/journal.pcbi.1007981](https://doi.org/10.1371/journal.pcbi.1007981).
 
