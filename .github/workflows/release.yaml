@@ -32,6 +32,7 @@ jobs:
           pip install black
           pip install isort
           pip install pytest
+          pip install pytest-cov
       - name: Build a binary wheel and a source tarball
         shell: bash -l {0}
         run: just build
