@@ -38,6 +38,7 @@ jobs:
           pip install black
           pip install isort
           pip install pytest
+          pip install pytest-cov
       - name: Check formatting
         shell: bash -l {0}
         run: just check-fmt
