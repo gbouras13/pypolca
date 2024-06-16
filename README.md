@@ -12,6 +12,18 @@
 
 `pypolca` is a Standalone Python re-implementation of the POLCA polisher from the [MaSuRCA genome assembly and analysis toolkit](https://github.com/alekseyzimin/masurca).
 
+`pypolca` also adds a `--careful` flag that we have shown is (generally) the best performing short-read bacterial isolate genome polishing option across a range of depths and samples.
+
+The `‑‑careful` flag requires at least 4 reads to support the alternative allele, and a minimum ratio of 3 (i.e. at least three times as many reads must support the alterative allele compared to the reference allele). This prevents almost all false positives at low depths without sacrificing error removal sensitivity.
+
+**Therefore, we recommend you always use `pypolca` with `--careful`**
+
+# Manuscript 
+
+For more information about `pypolca` and `pypolca --careful`, along with [Polypolish](https://github.com/rrwick/Polypolish)'s new `--careful` option and our analysis of short-read polishing methods for near-perfect Nanopore assemblies, please read our manuscript introducing `pypolca`:
+
+Bouras G, Judd LM, Edwards RA, Vreugde S, Stinear TP, Wick RR. How low can you go? Short-read polishing of Oxford Nanopore bacterial genome assemblies. Microbial Genomics. 2024. doi: [https://doi.org/10.1099/mgen.0.001254](https://doi.org/10.1099/mgen.0.001254).
+
 ## Quick Start
 
 ```
@@ -21,12 +33,13 @@ conda create -n pypolca_env pypolca
 # activates conda environment
 conda activate pypolca_env
 
-# runs pypolca
-pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <threads> -o <output directory> 
+# runs pypolca with --careful
+pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <threads> -o <output directory> --careful
 ```
 
 ## Table of Contents
 - [pypolca](#pypolca)
+- [Manuscript](#manuscript)
   - [Quick Start](#quick-start)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
@@ -36,7 +49,6 @@ pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <th
     - [Pip](#pip)
     - [Source](#source)
   - [Usage](#usage)
-- [Benchmarking](#benchmarking)
 - [Citation](#citation)
 
 ## Description
@@ -48,7 +60,7 @@ It was written for a number of reasons:
 * MaSuRCA is only available on Linux, not for MacOS.
 * The original `polca.sh` script from MaSuRCA was difficult to use because you could not specify an output directory. Additionally, due to its shell implementation, both FASTQ read files needed to be input together as a string
 * To use `polca.sh`, you need to install the entire MaSuRCA assembly toolkit.
-* POLCA is recommended for long-read first bacterial assembly polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in my assembly tool [hybracter](https://github.com/gbouras13/hybracter).
+* POLCA is recommended for long-read first bacterial assembly polishing (see [this paper](https://doi.org/10.1371/journal.pcbi.1010905)) and I wanted to include it for MacOS and Linux in [hybracter](https://github.com/gbouras13/hybracter).
 
 Note: I neither guarantee nor desire that `pypolca` will give identical results to POLCA implemented in MaSuRCA. This is because of the different versions of [freebayes](https://github.com/freebayes/freebayes) and Samtools that might be used as a dependency. 
 
@@ -144,16 +156,11 @@ Options:
 
 The polished output FASTA will be `{prefix}_corrected.fasta` in the specified output directory and the POLCA report will be the textfile `{prefix}.report`
 
-# Benchmarking
-
-Please see [benchmarking](benchmarking.md) for more details. As can be seen, `pypolca` v0.2.0 was extremely similar, but not identical to POLCA.
-
-
 # Citation
 
-Please cite `pypolca` in your paper using:
+Please cite `pypolca` in your paper using both:
 
-Bouras G, Judd LM, Edwards RA, Vreugde S, Stinear TP, Wick RR (2024) How low can you go? Short-read polishing of Oxford Nanopore bacterial genome assemblies. bioRxiv 2024.03.07.584013; doi: [https://doi.org/10.1101/2024.03.07.584013](https://doi.org/10.1101/2024.03.07.584013)
+Bouras G, Judd LM, Edwards RA, Vreugde S, Stinear TP, Wick RR. How low can you go? Short-read polishing of Oxford Nanopore bacterial genome assemblies. Microbial Genomics. 2024. doi: [https://doi.org/10.1099/mgen.0.001254](https://doi.org/10.1099/mgen.0.001254).
 
 Zimin AV, Salzberg SL (2020) The genome polishing tool POLCA makes fast and accurate corrections in genome assemblies. PLoS Comput Biol 16(6): e1007981. [https://doi.org/10.1371/journal.pcbi.1007981](https://doi.org/10.1371/journal.pcbi.1007981).
 
