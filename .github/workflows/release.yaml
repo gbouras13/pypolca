@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.11
+          python-version: 3.9
           activate-environment: pypolca
           environment-file: build/environment.yaml
           auto-activate-base: false
