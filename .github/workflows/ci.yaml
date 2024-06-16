@@ -32,10 +32,6 @@ jobs:
           channel-priority: strict
           auto-update-conda: true
 
-      - name: Install project
-        shell: bash -l {0}
-        run: |
-          just install
       - name: Check formatting
         shell: bash -l {0}
         run: just check-fmt
