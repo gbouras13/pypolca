@@ -31,7 +31,13 @@ jobs:
           channels: conda-forge,bioconda,defaults
           channel-priority: strict
           auto-update-conda: true
-
+      - name: Install black and isort and pytest
+        shell: bash -l {0}
+        run: |
+          python -m pip install -U pip
+          pip install black
+          pip install isort
+          pip install pytest
       - name: Check formatting
         shell: bash -l {0}
         run: just check-fmt
