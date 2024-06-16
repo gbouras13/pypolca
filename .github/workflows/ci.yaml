@@ -35,7 +35,6 @@ jobs:
       - name: Install project
         shell: bash -l {0}
         run: |
-          mamba install python=${{ matrix.python-version }}
           just install
       - name: Check formatting
         shell: bash -l {0}

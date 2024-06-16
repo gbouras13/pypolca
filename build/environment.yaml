@@ -12,3 +12,4 @@ dependencies:
   - python >=3.8,<4.0
   - ripgrep
   - just
+  - flake8
