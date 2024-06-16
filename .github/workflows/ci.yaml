@@ -23,7 +23,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: 3.9
+          python-version: 3.11
           activate-environment: pypolca
           environment-file: build/environment.yaml
           auto-activate-base: false
@@ -31,14 +31,11 @@ jobs:
           channels: conda-forge,bioconda,defaults
           channel-priority: strict
           auto-update-conda: true
-      - name: Install black and isort and pytest
+      - name: Install project
         shell: bash -l {0}
         run: |
-          python -m pip install -U pip
-          pip install black
-          pip install isort
-          pip install pytest
-          pip install pytest-cov
+          mamba install python=${{ matrix.python-version }}
+          just install
       - name: Check formatting
         shell: bash -l {0}
         run: just check-fmt
