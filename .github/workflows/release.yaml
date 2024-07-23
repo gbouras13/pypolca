@@ -14,10 +14,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           python-version: 3.11
-          activate-environment: pypolca
+          activate-environment: pypolca_env
           environment-file: build/environment.yaml
           auto-activate-base: false
           miniforge-variant: Mambaforge
