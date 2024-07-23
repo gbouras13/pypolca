@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest]
-        python-version: ["3.9"]
+        python-version: ["3.11"]
 
     steps:
       - uses: actions/checkout@v3
@@ -35,7 +35,12 @@ jobs:
         shell: bash -l {0}
         run: |
           mamba install python=${{ matrix.python-version }}
-          just install
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install black
+          pip install isort
+          pip install pytest
+          pip install pytest-cov
       - name: Check formatting
         shell: bash -l {0}
         run: just check-fmt
