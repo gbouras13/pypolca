@@ -80,7 +80,7 @@ Installation from conda is recommended as this will install all non-python depen
 
 ### Conda
 
-`pypolca` will soon be available on bioconda.
+`pypolca` is available on bioconda.
 
 ```
 conda install -c bioconda pypolca
