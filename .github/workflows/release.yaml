@@ -17,7 +17,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           python-version: 3.11
-          activate-environment: pypolca_env
+          activate-environment: pypolca
           environment-file: build/environment.yaml
           auto-activate-base: false
           miniforge-variant: Mambaforge
