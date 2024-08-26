@@ -47,6 +47,7 @@ pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <th
   - [Installation](#installation)
     - [Conda](#conda)
     - [Pip](#pip)
+    - [Container](#container)
     - [Source](#source)
   - [Usage](#usage)
 - [Citation](#citation)
@@ -93,6 +94,21 @@ You can also install the Python components of `pypolca` with pip.
 ```
 pip install pypolca
 ```
+
+### Container
+
+If you have Docker/Singularity/Apptainer installed, you can use the [biocontainers container](https://quay.io/repository/biocontainers/pypolca?tab=tags) (yes, every bioconda package has one!)
+
+For example to install `pypolca v0.3.1` with Singularity
+
+```
+IMAGE_DIR="<the directory you want the .sif file to be in >"
+singularity pull --dir $IMAGE_DIR docker://quay.io/biocontainers/pypolca:0.3.1--pyhdfd78af_0
+
+containerImage="$IMAGE_DIR/pypolca_0.3.1--pyhdfd78af_0.sif"
+singularity exec $containerImage pypolca run -h
+```
+
 
 ### Source
 
