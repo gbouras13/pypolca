@@ -69,6 +69,8 @@ In testing, `pypolca` v0.2.0 (running Freebayes v1.3.6 and Samtools v1.18) was e
 
 I have decided to use the newest versions of freebayes and Samtools possible rather than the version installed with MaSuRCA, for ease of maintenance and particularly because the version of Samtools used is a major version behind and the CLI has changed. 
 
+Note: as of 21 March 2025, I bumped the dependency of freebayes to v1.3.9. Testing shows identical results to v1.3.6 and it is compatible with Apple Silicon MacOSX builds.(As an aside, v1.3.7 conda package appears to be broken)
+
 ### Note of Caution for Large (e.g. Eukaryotic) Genomes
 
 * I have implemeted `pypolca` predominantly for the use-case of polishing long-read bacterial genome assemblies with short reads. Therefore, I decided not to implement the batched multiprocessing of freebayes included in POLCA, because it was a lot of work for no benefit for most bacterial genomes. 

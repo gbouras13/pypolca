@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-13, ubuntu-latest] # macos-latest is arm which freebayes fails, so use macos-13 https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners
+        os: [macos-latest, ubuntu-latest] # macos-latest is arm which freebayes fails, so use macos-13 https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners
         python-version: ["3.11"]
 
     steps:
@@ -27,14 +27,13 @@ jobs:
           activate-environment: pypolca
           environment-file: build/environment.yaml
           auto-activate-base: false
-          miniforge-variant: Mambaforge
           channels: conda-forge,bioconda,defaults
           channel-priority: strict
           auto-update-conda: true
       - name: Install project
         shell: bash -l {0}
         run: |
-          mamba install python=${{ matrix.python-version }}
+          conda install python=${{ matrix.python-version }}
           python -m pip install --upgrade pip
           pip install -e .
           pip install black
