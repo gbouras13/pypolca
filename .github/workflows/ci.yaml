@@ -27,7 +27,6 @@ jobs:
           activate-environment: pypolca
           environment-file: build/environment.yaml
           auto-activate-base: false
-          miniforge-variant: Mambaforge
           channels: conda-forge,bioconda,defaults
           channel-priority: strict
           auto-update-conda: true
