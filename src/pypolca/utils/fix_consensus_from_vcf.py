@@ -216,3 +216,45 @@ def edit_distance(s1, s2):
             i -= 1
             j -= 1
     return subs, indels
+
+
+def is_homopolymer_change(ref_seq, alt_seq, homopolymer_length):
+    """
+    Check if the change between the ref and alt sequences is nothing but a homopolymer change. The
+    homopolymer_length is the minimum length of consecutive identical bases to be considered
+    a homopolymer. Both the ref and alt sequences must meet this length threshold.
+    """
+    if ref_seq == alt_seq:
+        return False
+
+    ref = run_length_encoding(ref_seq)
+    alt = run_length_encoding(alt_seq)
+
+    # The sequence of bases (ignoring run lengths) must be identical.
+    if [base for base, _ in ref] != [base for base, _ in alt]:
+        return False
+
+    # Each changed run must be a homopolymer in both ref and alt by the given threshold.
+    for (_, ref_len), (_, alt_len) in zip(ref, alt):
+        if ref_len != alt_len and min(ref_len, alt_len) < homopolymer_length:
+            return False
+
+    return True
+
+
+def run_length_encoding(seq):
+    """
+    Encodes a sequence as a list of (base, length) tuples.
+    Example: "AAACCGG" -> [('A', 3), ('C', 2), ('G', 2)]
+    """
+    if not seq:
+        return []
+    runs, prev, count = [], seq[0], 1
+    for base in seq[1:]:
+        if base == prev:
+            count += 1
+        else:
+            runs.append((prev, count))
+            prev, count = base, 1
+    runs.append((prev, count))
+    return runs
