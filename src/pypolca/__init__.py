@@ -105,6 +105,13 @@ def common_options(func):
             "--careful", is_flag=True, help="Equivalent to --min_alt 4 --min_ratio 3"
         ),
         click.option(
+            "--homopolymers",
+            help="Ignore all changes except for homopolymer-length changes, with homopolymers defined by this length",
+            default=None,
+            type=int,
+            show_default=True,
+        ),
+        click.option(
             "-n",
             "--no_polish",
             is_flag=True,
@@ -159,6 +166,7 @@ def run(
     force,
     min_alt,
     min_ratio,
+    homopolymers,
     careful,
     no_polish,
     memory_limit,
@@ -179,6 +187,7 @@ def run(
         "--careful": careful,
         "--min_alt": min_alt,
         "--min_ratio": min_ratio,
+        "--homopolymers": homopolymers,
         "--memory_limit": memory_limit,
         "--no_polish": no_polish,
         "--prefix": prefix,
@@ -252,7 +261,7 @@ def run(
     out_fasta: Path = Path(output) / f"{prefix}_corrected.fasta"
     if no_polish is False:
         subs, indels = fix_consensus_from_vcf(
-            assembly_temp, vcf, out_fasta, min_alt, min_ratio
+            assembly_temp, vcf, out_fasta, min_alt, min_ratio, homopolymers
         )
     else:
         subs, indels = 0, 0

@@ -56,14 +56,15 @@ def test_is_homopolymer_change_2():
     assert ihc("CGGGGA", "CGGGGGA", 4)
     assert not ihc("CGGGGA", "CGGGGGA", 5)
     assert not ihc("CGGGGA", "CGGGGGA", 6)
-    assert ihc("AGGGGGTG", "AGGGGTG", 3)
     assert ihc("AGGGGGTG", "AGGGGTG", 4)
-    assert not ihc("AGGGGGTG", "AGGGGTG", 5)
+    assert ihc("AGGGGGTG", "AGGGGTG", 5)
     assert not ihc("AGGGGGTG", "AGGGGTG", 6)
+    assert not ihc("AGGGGGTG", "AGGGGTG", 7)
     assert ihc("ACGT", "ACCGT", 1)
     assert ihc("ACGGT", "ACGT", 1)
     assert not ihc("ACGT", "ACCGT", 2)
-    assert not ihc("ACGGT", "ACGT", 2)
+    assert ihc("ACGGT", "ACGT", 2)
+    assert not ihc("ACGGT", "ACGT", 3)
 
 
 def test_is_homopolymer_change_3():
@@ -85,7 +86,7 @@ def test_is_homopolymer_change_4():
     """
     ihc = pypolca.utils.fix_consensus_from_vcf.is_homopolymer_change
     assert not ihc("CAAAAAAAACCG", "CAAAAAAAAACCG", 9)
-    assert not ihc("TCCCCCCCCCTCGCA", "TCCCCCCCCTCGCA", 9)
+    assert not ihc("TCCCCCCCCCTCGCA", "TCCCCCCCCTCGCA", 10)
     assert not ihc("TGGGGGGGGAGGTTT", "TGGGGGGGGGAGGTTT", 9)
     assert not ihc("AAAAAAAA", "AAAAAAAAA", 9)
     assert not ihc("ATTTTTTTTTAAAATTT", "ATTTTTTTTTTAAAATTT", 10)

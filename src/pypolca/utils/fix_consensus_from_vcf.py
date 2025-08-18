@@ -2,7 +2,7 @@
 
 import re
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -17,6 +17,7 @@ def fix_consensus_from_vcf(
     out_fasta: Path,
     min_alt: int,
     min_ratio: float,
+    homopolymers: Optional[int],
 ) -> Tuple[int, int]:
     """
     Fix errors in the consensus called in a VCF file by FreeBayes.
@@ -30,6 +31,11 @@ def fix_consensus_from_vcf(
         total_subs (int): the total number of substitution changes made
         total_indels (int): the total number of indel changes made
     """
+    if homopolymers is not None:
+        logger.info(
+            f"Homopolymer-only mode - ignoring all variants except for length changes in "
+            f"≥{homopolymers} bp homopolymers."
+        )
 
     rseq = {}
     ctg, seq = "", ""
@@ -113,19 +119,27 @@ def fix_consensus_from_vcf(
                 offsets = []
                 ctg = f[0]
 
-            # append if meets criteria for POLCA
+            # check that the change has enough support
             ff = f[9].split(":")
             ref_count, alt_count = int(ff[3]), int(ff[5])
             ref_seq, alt_seq = f[3], f[4]
-            if alt_count >= min_alt:
-                if alt_count >= min_ratio * ref_count:
-                    fixes.append(alt_seq)
-                    originals.append(ref_seq)
-                    offsets.append(int(f[1]))
-                    subs, indels = edit_distance(ref_seq, alt_seq)
-                    total_subs += subs
-                    total_indels += indels
-                    total_count += 1
+            if alt_count < min_alt or alt_count < min_ratio * ref_count:
+                continue
+
+            # if homopolymer-only changes are turned on, check that the change is a homopolymer
+            if homopolymers is not None and not is_homopolymer_change(
+                ref_seq, alt_seq, homopolymers
+            ):
+                continue
+
+            # passed checks, append to fixes to apply
+            fixes.append(alt_seq)
+            originals.append(ref_seq)
+            offsets.append(int(f[1]))
+            subs, indels = edit_distance(ref_seq, alt_seq)
+            total_subs += subs
+            total_indels += indels
+            total_count += 1
 
     # actually fix the report now
     # if fixes as previously means that this step wouldn't continue if the last contig had no changes
@@ -221,8 +235,8 @@ def edit_distance(s1, s2):
 def is_homopolymer_change(ref_seq, alt_seq, homopolymer_length):
     """
     Check if the change between the ref and alt sequences is nothing but a homopolymer change. The
-    homopolymer_length is the minimum length of consecutive identical bases to be considered
-    a homopolymer. Both the ref and alt sequences must meet this length threshold.
+    homopolymer_length is the minimum length of consecutive identical bases (in the ref) to be
+    considered a homopolymer.
     """
     if ref_seq == alt_seq:
         return False
@@ -234,9 +248,9 @@ def is_homopolymer_change(ref_seq, alt_seq, homopolymer_length):
     if [base for base, _ in ref] != [base for base, _ in alt]:
         return False
 
-    # Each changed run must be a homopolymer in both ref and alt by the given threshold.
+    # Each changed run must be long enough to be considered a homopolymer.
     for (_, ref_len), (_, alt_len) in zip(ref, alt):
-        if ref_len != alt_len and min(ref_len, alt_len) < homopolymer_length:
+        if ref_len != alt_len and ref_len < homopolymer_length:
             return False
 
     return True
