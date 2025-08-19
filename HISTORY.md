@@ -1,12 +1,43 @@
 History
 =======
 
-0.3.1 (2023-02-02)
+0.4.0 (2025-08-19)
+------------------
+
+* Adds `--homopolymers` as an option for using closely related (but not identical) short-read data for polishing only homopolymers
+* Thanks @rrwick for implementing this!
+* Specifically, the `--homopolymers` option tells Pypolca to ignore all changes except those changing the length of homopolymers of at least the given length.
+* For example, with `--homopolymers 6`:
+    * `ACGTA` → `ACATA` ❌ Not applied (change is not in a homopolymer).
+    * `ACGTTTTTTTCAA` → `ACGTTTTTTTTCAA` ✅ Applied (homopolymer ≥6 bp).
+    * `GCTAAAATCG` → `GCTAAAAATCG` ❌ Not applied (homopolymer <6 bp).
+  
+This mode is useful when polishing an ONT-only assembly without having short reads from the same sample. You can instead use reads from a closely related sample. The underlying assumptions are:
+1. ONT-only assemblies often contain errors in homopolymer length, especially for long homopolymers.
+2. Short reads will be more accurate than ONT reads for long homopolymers.
+3. Homopolymer runs are generally conserved between closely related genomes.
+
+Example command, where 'sample A' is your ONT-only assembly and 'sample B' is a closely related genome with short reads:
+```bash
+pypolca run -a sample_A_draft.fasta -1 sample_B_1.fastq.gz -2 sample_B_2.fastq.gz -t 16 --careful --homopolymers 6
+```
+
+If you don’t have reads from a related sample but do have a reference genome, you can simulate reads with [wgsim](https://github.com/lh3/wgsim):
+```bash
+pair_count=$(seqtk size sample_B.fasta | awk '{s+=$2} END{print int(s/4)}')  # ~50× depth
+wgsim -e 0.0 -r 0.0 -N "$pair_count" -1 100 -2 100 sample_B.fasta temp_1.fastq temp_2.fastq
+pypolca run -a sample_A_draft.fasta -1 temp_1.fastq -2 temp_2.fastq -t 16 --careful --homopolymers 6
+rm temp_1.fastq temp_2.fastq
+```
+
+We recommend a threshold of 6, since modern ONT-only assemblies are typically accurate for shorter homopolymers.
+
+0.3.1 (2024-02-02)
 ------------------
 
 * Adds `--careful` to log file to make it clear if it has been run
 
-0.3.0 (2023-01-17)
+0.3.0 (2024-01-17)
 ------------------
 
 * Includes a number of changes by @rrwick
