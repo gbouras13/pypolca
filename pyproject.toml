@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "pypolca"
-version = "0.3.1" # change VERSION too
+version = "0.4.0" # change VERSION too
 description = "Standalone Python implementation of the POLCA polisher from MaSuRCA"
-authors = ["George Bouras <george.bouras@adelaide.edu.au>"]
+authors = ["George Bouras <george.bouras@adelaide.edu.au>", "Ryan Wick rrwick@gmail.com"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/gbouras13/pypolca"
