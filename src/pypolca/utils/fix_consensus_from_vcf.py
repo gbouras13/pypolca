@@ -2,7 +2,7 @@
 
 import re
 from pathlib import Path
-from typing import Dict, Tuple, Optional
+from typing import Dict, Optional, Tuple
 
 from Bio import SeqIO
 from Bio.Seq import Seq
