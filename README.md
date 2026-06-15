@@ -179,7 +179,7 @@ The polished output FASTA will be `{prefix}_corrected.fasta` in the specified ou
 
 ## Homopolymer-only mode
 
-The `--homopolymers` option tells Pypolca to ignore all changes except those changing the length of homopolymers of at least the given length.
+The `--homopolymers` option tells `pypolca` to ignore all changes except those changing the length of homopolymers of at least the given length.
 
 For example, with `--homopolymers 6`:
 * `ACGTA` → `ACATA` ❌ Not applied (change is not in a homopolymer).
@@ -193,14 +193,16 @@ This mode is useful when polishing an ONT-only assembly without having short rea
 
 Example command, where 'sample A' is your ONT-only assembly and 'sample B' is a closely related genome with short reads:
 ```bash
-pypolca run -a sample_A_draft.fasta -1 sample_B_1.fastq.gz -2 sample_B_2.fastq.gz -t 16 --careful --homopolymers 6
+pypolca run -a sample_A_draft.fasta -1 sample_B_1.fastq.gz -2 sample_B_2.fastq.gz -t 16 --homopolymers 6
 ```
+
+Unlike for the general use of `pypolca`, the example above does _not_ include `--careful`. Although short reads are generally more accurate than ONT reads for long homopolymers, they can still be inconsistent. Being too strict may therefore block genuine homopolymer corrections from being applied.
 
 If you don’t have reads from a related sample but do have a reference genome, you can simulate reads with [wgsim](https://github.com/lh3/wgsim):
 ```bash
 pair_count=$(seqtk size sample_B.fasta | awk '{s+=$2} END{print int(s/4)}')  # ~50× depth
 wgsim -e 0.0 -r 0.0 -N "$pair_count" -1 100 -2 100 sample_B.fasta temp_1.fastq temp_2.fastq
-pypolca run -a sample_A_draft.fasta -1 temp_1.fastq -2 temp_2.fastq -t 16 --careful --homopolymers 6
+pypolca run -a sample_A_draft.fasta -1 temp_1.fastq -2 temp_2.fastq -t 16 --homopolymers 6
 rm temp_1.fastq temp_2.fastq
 ```
 
