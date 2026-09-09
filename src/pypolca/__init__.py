@@ -4,6 +4,7 @@
 from pathlib import Path
 
 import click
+from click.core import ParameterSource
 from loguru import logger
 
 from pypolca.utils.fix_consensus_from_vcf import fix_consensus_from_vcf
@@ -215,6 +216,26 @@ def run(
 
     # begin pypolca - initial logging etc
     start_time = begin_pypolca(params)
+
+    # --careful was the best performing short read polishing option across a
+    # range of depths and samples in our benchmarking, so nudge anyone who has
+    # not asked for it. Anyone who has set their own thresholds has made a
+    # deliberate choice, so leave them be.
+    custom_thresholds = any(
+        ctx.get_parameter_source(param) is not ParameterSource.DEFAULT
+        for param in ("min_alt", "min_ratio")
+    )
+    if careful is False and custom_thresholds is False:
+        logger.warning("You have not specified --careful.")
+        logger.warning(
+            "We recommend you always run pypolca with --careful, which requires at least 4 reads supporting the alternate allele and at least 3 times as many alternate as reference reads."
+        )
+        logger.warning(
+            "It prevents almost all false positives at low depth without sacrificing error removal sensitivity, and was the best performing short read polishing option across a range of depths and samples in our benchmarking."
+        )
+        logger.warning(
+            "See Bouras et al. (2024) How low can you go? Short-read polishing of Oxford Nanopore bacterial genome assemblies. Microbial Genomics. doi: 10.1099/mgen.0.001254"
+        )
 
     # check dependencies
     check_dependencies()
