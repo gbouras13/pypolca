@@ -13,6 +13,7 @@ from pypolca.utils.mapping import (
     bwa_paired,
     bwa_single,
     sam_to_bam,
+    samtools_cat,
     samtools_index,
 )
 from pypolca.utils.report import create_report
@@ -68,6 +69,13 @@ def common_options(func):
             default=None,
             type=click.Path(),
             help="Path to polishing reads R2 FASTQ. Can be FASTQ or FASTQ gzipped. Optional. Only use -1 if you have single end reads.",
+        ),
+        click.option(
+            "-s",
+            "--reads_se",
+            default=None,
+            type=click.Path(),
+            help="Path to single end polishing reads FASTQ, such as the unpaired reads kept by fastp. Can be FASTQ or FASTQ gzipped. Optional. Used in addition to -1 and -2.",
         ),
         click.option(
             "-t",
@@ -161,6 +169,7 @@ def run(
     assembly,
     reads1,
     reads2,
+    reads_se,
     threads,
     output,
     force,
@@ -181,6 +190,7 @@ def run(
         "--assembly": assembly,
         "--reads1": reads1,
         "--reads2": reads2,
+        "--reads_se": reads_se,
         "--output": output,
         "--threads": threads,
         "--force": force,
@@ -225,6 +235,13 @@ def run(
         validate_fastq(reads1)
         validate_fastq(reads2)
 
+    # extra single end reads (e.g. the unpaired reads kept by fastp) are optional
+    se_flag = reads_se is not None
+    if se_flag:
+        logger.info("You have specified -s or --reads_se.")
+        logger.info("These reads will be used for polishing in addition to -1 and -2.")
+        validate_fastq(reads_se)
+
     logger.info(f"Checking memory limit of {memory_limit}.")
     check_memory_limit(memory_limit)
 
@@ -247,6 +264,19 @@ def run(
     bam: Path = temp_dir / "temp_bwa.bam"
     sorted_bam: Path = temp_dir / "temp_bwa_sorted.bam"
     sam_to_bam(sam, bam, threads, logdir)
+
+    # align the extra single end reads separately and concatenate the BAMs.
+    # both are aligned against the same bwa index, so samtools cat can join
+    # them without either needing to be sorted first
+    if se_flag:
+        se_sam: Path = temp_dir / "temp_bwa_se.sam"
+        se_bam: Path = temp_dir / "temp_bwa_se.bam"
+        merged_bam: Path = temp_dir / "temp_bwa_merged.bam"
+        bwa_single(reads_se, assembly_temp, se_sam, threads, logdir)
+        sam_to_bam(se_sam, se_bam, threads, logdir)
+        samtools_cat([bam, se_bam], merged_bam, logdir)
+        bam = merged_bam
+
     bam_to_sorted_bam(bam, sorted_bam, threads, memory_limit, logdir)
     samtools_index(sorted_bam, threads, logdir)
 

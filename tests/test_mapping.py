@@ -121,3 +121,30 @@ def test_bwa_single_command(captured, tmp_path):
     (tool,) = captured
     assert tool.command == ["bwa", "mem", "-SP", "-t", "8", str(genome), str(r1)]
     assert_options_have_values(tool.command)
+
+
+def test_samtools_cat_command(captured, tmp_path):
+    """
+    The extra single end reads are aligned separately and joined onto the
+    paired BAM with samtools cat, so -o must carry a value and every input
+    BAM must survive as a positional argument.
+
+    samtools cat must NOT be passed -@ - it only accepts the long form
+    --threads, and older versions accept neither.
+    """
+    bam = tmp_path / "temp_bwa.bam"
+    se_bam = tmp_path / "temp_bwa_se.bam"
+    merged_bam = tmp_path / "temp_bwa_merged.bam"
+    mapping.samtools_cat([bam, se_bam], merged_bam, tmp_path / "logs")
+
+    (tool,) = captured
+    assert tool.command == [
+        "samtools",
+        "cat",
+        "-o",
+        str(merged_bam),
+        str(bam),
+        str(se_bam),
+    ]
+    assert "-@" not in tool.command
+    assert_options_have_values(tool.command)
