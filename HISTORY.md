@@ -1,6 +1,13 @@
 History
 =======
 
+0.4.2 (2026-09-09)
+------------------
+
+* `pypolca run` now warns if you have not specified `--careful`, pointing at the benchmarking in [Bouras et al. (2024)](https://doi.org/10.1099/mgen.0.001254). The README has always recommended `--careful`; this just makes the recommendation visible at runtime.
+* The warning is skipped if you have set `--min_alt` or `--min_ratio` yourself, since that is a deliberate choice - telling someone running `--min_alt 10` to loosen to 4 would be bad advice.
+* Nothing about the default behaviour has changed. `--careful` is still opt-in.
+
 0.4.1 (2026-09-09)
 ------------------
 
