@@ -4,13 +4,14 @@ History
 0.5.0 (2026-09-09)
 ------------------
 
+**Extra single end reads**
+
 * Adds `-s`/`--reads_se` to provide extra single end reads (such as the unpaired reads kept by fastp) alongside `-1` and `-2`. Implements [#8](https://github.com/gbouras13/pypolca/issues/8) - thanks @oschwengers for the request and for your patience.
 * **This is a quality-of-life change only.** It exists so you don't need to throw away the unpaired reads your QC tool kept, and for parity with POLCA, which accepts them via `polca.sh -a assembly.fna -r 'R1.fastq R2.fastq SE.fastq'`. Please do not expect it to improve your polished assembly - these files are usually well under 1% of the library.
 * Implementation: the single end reads are aligned separately with `bwa mem` and their alignments concatenated onto the paired alignments with `samtools cat` before sorting and variant calling.
 * One caveat worth knowing. Unpaired reads kept by QC tools tend to be lower quality than the paired reads they came from, because they are exactly the reads that only just survived filtering. On the `C347` sample bundled with the tests, the single end reads were 0.86% of the library but had 22% of bases below Q20, against 7% for the paired reads. At the default thresholds they added 41 extra substitutions (97 to 138) by tipping marginal positions over `--min_alt 2`. With `--careful` they changed almost nothing (73 substitutions either way). If you use `-s`, `--careful` is recommended.
 
-0.4.2 (2026-09-09)
-------------------
+**`--careful` warning**
 
 * `pypolca run` now warns if you have not specified `--careful`, pointing at the benchmarking in [Bouras et al. (2024)](https://doi.org/10.1099/mgen.0.001254). The README has always recommended `--careful`; this just makes the recommendation visible at runtime.
 * The warning is skipped if you have set `--min_alt` or `--min_ratio` yourself, since that is a deliberate choice - telling someone running `--min_alt 10` to loosen to 4 would be bad advice.
