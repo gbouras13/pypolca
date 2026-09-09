@@ -93,6 +93,18 @@ def test_C347_single(tmp_dir):
     remove_directory(outdir)
 
 
+def test_C347_reads_se(tmp_dir):
+    """test C347 with extra single end reads via -s/--reads_se"""
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
+    r1: Path = f"{test_data}/C347_R1.fastq.gz"
+    r2: Path = f"{test_data}/C347_R2.fastq.gz"
+    se: Path = f"{test_data}/C347_se.fastq.gz"
+    outdir: Path = "output_dir"
+    cmd = f"pypolca run -a {input_fasta} -1 {r1} -2 {r2} -s {se} -t {threads} -o {outdir} -f"
+    exec_command(cmd)
+    remove_directory(outdir)
+
+
 def careful_warning_in_log(outdir):
     """True if the --careful nudge was written to the pypolca log file."""
     logs = list(Path(outdir).glob("pypolca_*.log"))

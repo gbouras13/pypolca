@@ -163,3 +163,34 @@ def samtools_index(sorted_bam: Path, threads: int, logdir: Path) -> None:
 
     # need to write to stdout
     ExternalTool.run_tool(samtools_index, to_stdout=False)
+
+
+def samtools_cat(bams: list, merged_bam: Path, logdir: Path) -> None:
+    """concatenates bams with samtools cat
+
+    The input BAMs are all aligned against the same bwa index, so their @SQ
+    headers match and they can be concatenated without being sorted first.
+
+    No -@ here on purpose. samtools cat only takes the long form --threads
+    (and not at all in older versions), and it copies BGZF blocks without
+    recompressing them, so threading buys effectively nothing.
+
+    :param bams: list of bam paths to concatenate
+    :param merged_bam: output merged bam path
+    :param logdir: logdir
+    :return:
+    """
+
+    bam_str = " ".join(str(bam) for bam in bams)
+
+    samtools_cat = ExternalTool(
+        tool="samtools",
+        input="",
+        output="",
+        params=f" cat -o {merged_bam} {bam_str} ",
+        logdir=logdir,
+        outfile="",
+    )
+
+    # need to write to stdout
+    ExternalTool.run_tool(samtools_cat, to_stdout=False)

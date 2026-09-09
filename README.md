@@ -50,6 +50,7 @@ pypolca run -a <genome> -1 <R1 short reads file> -2 <R2 short reads file> -t <th
     - [Container](#container)
     - [Source](#source)
   - [Usage](#usage)
+  - [Extra single end reads](#extra-single-end-reads)
   - [Homopolymer-only mode](#homopolymer-only-mode)
   - [Citation](#citation)
 
@@ -158,6 +159,10 @@ Options:
   -2, --reads2 PATH        Path to polishing reads R2 FASTQ. Can be FASTQ or
                            FASTQ gzipped. Optional. Only use -1 if you have
                            single end reads.
+  -s, --reads_se PATH      Path to single end polishing reads FASTQ, such as
+                           the unpaired reads kept by fastp. Can be FASTQ or
+                           FASTQ gzipped. Optional. Used in addition to -1 and
+                           -2.
   -t, --threads INTEGER    Number of threads.  [default: 1]
   -o, --output PATH        Output directory path  [default: output_pypolca]
   -f, --force              Force overwrites the output directory
@@ -176,6 +181,20 @@ Options:
 ```
 
 The polished output FASTA will be `{prefix}_corrected.fasta` in the specified output directory and the POLCA report will be the textfile `{prefix}.report`
+
+## Extra single end reads
+
+Short-read QC tools like [fastp](https://github.com/OpenGene/fastp) can keep the reads whose mate was filtered out, leaving you with R1, R2 and a small file of unpaired single end reads. `-s` (`--reads_se`) lets you pass those to `pypolca` alongside `-1` and `-2` rather than discarding them:
+
+```bash
+pypolca run -a assembly.fasta -1 R1.fastq.gz -2 R2.fastq.gz -s SE.fastq.gz -t 16 --careful
+```
+
+The single end reads are aligned separately with `bwa mem` and their alignments are concatenated onto the paired alignments before variant calling.
+
+This is a quality-of-life option for convenience and for parity with POLCA (which accepts `polca.sh -a assembly.fna -r 'R1.fastq R2.fastq SE.fastq'`). **It is not expected to improve your polished assembly meaningfully** - these files are usually well under 1% of the library.
+
+One thing to be aware of: unpaired reads kept by QC tools tend to be lower quality than the paired reads they came from, because they are exactly the reads that only just survived filtering. In testing on the `C347` sample bundled with the tests, the single end reads (0.86% of the library) had 22% of bases below Q20 compared to 7% for the paired reads. At the default thresholds they added 41 extra substitutions (97 to 138) by tipping marginal positions over `--min_alt 2`, while with `--careful` they changed almost nothing (73 substitutions either way). If you use `-s`, `--careful` is recommended.
 
 ## Homopolymer-only mode
 
