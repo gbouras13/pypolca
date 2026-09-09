@@ -1,6 +1,23 @@
 History
 =======
 
+0.4.2 (2026-09-09)
+------------------
+
+* `pypolca run` now warns if you have not specified `--careful`, pointing at the benchmarking in [Bouras et al. (2024)](https://doi.org/10.1099/mgen.0.001254). The README has always recommended `--careful`; this just makes the recommendation visible at runtime.
+* The warning is skipped if you have set `--min_alt` or `--min_ratio` yourself, since that is a deliberate choice - telling someone running `--min_alt 10` to loosen to 4 would be bad advice.
+* Nothing about the default behaviour has changed. `--careful` is still opt-in.
+
+0.4.1 (2026-09-09)
+------------------
+
+* Fixes [#28](https://github.com/gbouras13/pypolca/issues/28) - `samtools index` failing with return code 1.
+* The `samtools index` command was built as `samtools index -@ <bam>`, with the thread count missing after `-@`. Samtools therefore consumed the BAM path as the argument to `-@`, leaving it with no input file.
+    * With Samtools v1.4-v1.15, this exited with code 1 and aborted the run - the error reported in the issue.
+    * With Samtools <=v1.3.1, `-@` was not a valid option for `samtools index` at all, giving `index: invalid option -- '@'` and exiting 1.
+    * With Samtools >=v1.16, it printed the usage message to stdout and exited 0, so `pypolca` continued silently without ever writing the `.bai` index. Polishing results were unaffected, because `freebayes` is run over the whole BAM and does not need an index.
+* Thanks @SuPrSh, @jyap21 and @stevebaeyen for reporting.
+
 0.4.0 (2025-08-19)
 ------------------
 

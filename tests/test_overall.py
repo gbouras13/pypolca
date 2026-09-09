@@ -93,6 +93,51 @@ def test_C347_single(tmp_dir):
     remove_directory(outdir)
 
 
+def careful_warning_in_log(outdir):
+    """True if the --careful nudge was written to the pypolca log file."""
+    logs = list(Path(outdir).glob("pypolca_*.log"))
+    assert len(logs) == 1, f"expected one log file, got {logs}"
+    return "You have not specified --careful." in logs[0].read_text()
+
+
+def test_careful_warning_shown_by_default(tmp_dir):
+    """the --careful nudge is shown when --careful is not specified"""
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
+    r1: Path = f"{test_data}/C347_R1.fastq.gz"
+    outdir: Path = "output_dir"
+    cmd = f"pypolca run -a {input_fasta} -1 {r1} -t {threads} -o {outdir} -f -n"
+    exec_command(cmd)
+    assert careful_warning_in_log(outdir) is True
+    remove_directory(outdir)
+
+
+def test_careful_warning_absent_with_careful(tmp_dir):
+    """the --careful nudge is not shown when --careful is specified"""
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
+    r1: Path = f"{test_data}/C347_R1.fastq.gz"
+    outdir: Path = "output_dir"
+    cmd = (
+        f"pypolca run -a {input_fasta} -1 {r1} -t {threads} -o {outdir} -f -n --careful"
+    )
+    exec_command(cmd)
+    assert careful_warning_in_log(outdir) is False
+    remove_directory(outdir)
+
+
+def test_careful_warning_absent_with_custom_thresholds(tmp_dir):
+    """
+    the --careful nudge is not shown to anyone who set their own thresholds -
+    telling someone running --min_alt 10 to loosen to 4 would be bad advice
+    """
+    input_fasta: Path = f"{test_data}/C347_flye.fasta"
+    r1: Path = f"{test_data}/C347_R1.fastq.gz"
+    outdir: Path = "output_dir"
+    cmd = f"pypolca run -a {input_fasta} -1 {r1} -t {threads} -o {outdir} -f -n --min_alt 10"
+    exec_command(cmd)
+    assert careful_warning_in_log(outdir) is False
+    remove_directory(outdir)
+
+
 def test_citation():
     """test citation"""
     cmd = f"pypolca citation"
