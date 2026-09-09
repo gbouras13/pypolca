@@ -144,9 +144,9 @@ def bam_to_sorted_bam(
     ExternalTool.run_tool(bam_to_sorted_bam, to_stdout=False)
 
 
-def samtools_index(sorted_bam: Path, logdir: Path) -> None:
-    """converts bam to sorted bam with samtools
-    :param outdir: output directory path
+def samtools_index(sorted_bam: Path, threads: int, logdir: Path) -> None:
+    """indexes a sorted bam with samtools
+    :param sorted_bam: sorted bam path
     :param threads: threads
     :param logdir: logdir
     :return:
@@ -156,7 +156,7 @@ def samtools_index(sorted_bam: Path, logdir: Path) -> None:
         tool="samtools",
         input="",
         output="",
-        params=f" index -@ {sorted_bam} ",
+        params=f" index -@ {threads} {sorted_bam} ",
         logdir=logdir,
         outfile="",
     )

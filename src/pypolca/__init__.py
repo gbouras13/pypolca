@@ -248,7 +248,7 @@ def run(
     sorted_bam: Path = temp_dir / "temp_bwa_sorted.bam"
     sam_to_bam(sam, bam, threads, logdir)
     bam_to_sorted_bam(bam, sorted_bam, threads, memory_limit, logdir)
-    samtools_index(sorted_bam, logdir)
+    samtools_index(sorted_bam, threads, logdir)
 
     logger.info("Calling variants.")
     samtools_faidx(assembly_temp, logdir)
